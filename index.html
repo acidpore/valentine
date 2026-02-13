@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Fira Code', monospace;
-            background: url('background.jpg') no-repeat center bottom fixed;
+            background: url('pixel-valentine/background.jpg') no-repeat center bottom fixed;
             background-size: cover;
             min-height: 100vh;
             color: #fff;
@@ -754,6 +754,16 @@
             transform: translateY(-20px) rotate(5deg) scale(1.15) !important;
         }
 
+        /* Make iloveyou decoration clickable */
+        .deco-iloveyou {
+            pointer-events: auto !important;
+            cursor: pointer;
+        }
+
+        .deco-iloveyou:hover {
+            transform: translateY(-20px) rotate(5deg) scale(1.15) !important;
+        }
+
         /* Retro Video Player Popup */
         .video-overlay {
             position: fixed;
@@ -1465,7 +1475,7 @@
     </div>
 
     <!-- Info Button -->
-    <img src="../assets/information.png" class="info-btn" id="infoBtn" alt="Info" title="Tutorial">
+    <img src="assets/information.png" class="info-btn" id="infoBtn" alt="Info" title="Tutorial">
 
     <!-- Tutorial Popup -->
     <div class="tutorial-overlay" id="tutorialOverlay">
@@ -1474,7 +1484,7 @@
             <div class="tutorial-header">Panduan Website</div>
 
             <div class="tutorial-item">
-                <div class="tutorial-icon"><img src="../assets/love_letter-removebg-preview.png" alt="Letter"></div>
+                <div class="tutorial-icon"><img src="assets/love_letter-removebg-preview.png" alt="Letter"></div>
                 <div class="tutorial-text">
                     <h4>Love Letter</h4>
                     <p>Kalo ada <strong>surat jatuh</strong> di klik ya sayang :3</p>
@@ -1482,7 +1492,7 @@
             </div>
 
             <div class="tutorial-item">
-                <div class="tutorial-icon"><img src="../assets/kiss-removebg-preview.png" alt="Kiss"></div>
+                <div class="tutorial-icon"><img src="assets/kiss-removebg-preview.png" alt="Kiss"></div>
                 <div class="tutorial-text">
                     <h4>Video Player</h4>
                     <p>Kenangan dari <strong>kamu</strong> bakal selalu aku inget.</p>
@@ -1490,7 +1500,7 @@
             </div>
 
             <div class="tutorial-item">
-                <div class="tutorial-icon"><img src="../assets/heart-removebg-preview.png" alt="Heart"></div>
+                <div class="tutorial-icon"><img src="assets/heart-removebg-preview.png" alt="Heart"></div>
                 <div class="tutorial-text">
                     <h4>Chat History</h4>
                     <p>Wah <strong>setahun lalu</strong> udahan ya sayang, ga kerasa kalo bareng kamu :3.</p>
@@ -1498,7 +1508,7 @@
             </div>
 
             <div class="tutorial-item">
-                <div class="tutorial-icon"><img src="../assets/iloveyou-removebg-preview.png" alt="Music"></div>
+                <div class="tutorial-icon"><img src="assets/iloveyou-removebg-preview.png" alt="Music"></div>
                 <div class="tutorial-text">
                     <h4>Music Player</h4>
                     <p>Fitur aja sih hehe.</p>
@@ -1518,10 +1528,10 @@
     </div>
 
     <!-- Decorations -->
-    <img src="../assets/heart-removebg-preview.png" class="decoration deco-heart" alt="Heart">
-    <img src="../assets/kiss-removebg-preview.png" class="decoration deco-kiss" alt="Kiss">
-    <img src="../assets/iloveyou-removebg-preview.png" class="decoration deco-iloveyou" alt="I Love You">
-    <img src="../assets/video-removebg-preview.png" class="decoration deco-video" alt="Video">
+    <img src="assets/heart-removebg-preview.png" class="decoration deco-heart" alt="Heart">
+    <img src="assets/kiss-removebg-preview.png" class="decoration deco-kiss" alt="Kiss">
+    <img src="assets/iloveyou-removebg-preview.png" class="decoration deco-iloveyou" alt="I Love You">
+    <img src="assets/video-removebg-preview.png" class="decoration deco-video" alt="Video">
 
     <!-- Music Player -->
     <div class="music-player-container">
@@ -1576,7 +1586,7 @@
 
     <!-- Audio Element -->
     <audio id="bgMusic" preload="auto">
-        <source src="../assets/LANY - Valentine's Day.m4a" type="audio/mp4">
+        <source src="assets/LANY - Valentine's Day.m4a" type="audio/mp4">
     </audio>
 
     <!-- Love Letter Popup -->
@@ -1598,7 +1608,7 @@
             </div>
             <div class="video-screen">
                 <video id="retroVideo" controls>
-                    <source src="../assets/Animasi 1.mp4" type="video/mp4">
+                    <source src="assets/Animasi 1.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="video-controls">
@@ -1623,7 +1633,7 @@
         </div>
     </div>
 
-    <script src="pixel_carousel.js"></script>
+    <script src="pixel-valentine/pixel_carousel.js"></script>
     <script>
         // Elements
         const codeEditor = document.getElementById('codeEditor');
@@ -1777,7 +1787,7 @@
 
             // The letter itself - using image
             const letter = document.createElement('img');
-            letter.src = '../assets/love_letter-removebg-preview.png';
+            letter.src = 'assets/love_letter-removebg-preview.png';
             letter.className = 'big-pixel-letter';
 
             // No heart seal needed for image, it's part of the image
@@ -1999,8 +2009,8 @@
         const kissDecoration = document.querySelector('.deco-kiss');
 
         const videoPlaylist = [
-            '../assets/Animasi 1.mp4',
-            '../assets/Animasi 2.mp4'
+            'assets/Animasi 1.mp4',
+            'assets/Animasi 2.mp4'
         ];
         let currentVideoIndex = 0;
 
@@ -2070,7 +2080,7 @@
         // Chat data (converted from chat.md)
         const chatData = [
             { sender: "fey", time: "14:10", text: "Heyyo heyyoo, lagi apaa" },
-            { sender: "fey", time: "14:11", text: "Renungan hari iniehhh", image: "../assets/photo_2025-02-14_14-11-52.jpg" },
+            { sender: "fey", time: "14:11", text: "Renungan hari iniehhh", image: "assets/photo_2025-02-14_14-11-52.jpg" },
             { sender: "awie", time: "15:39", text: "hawlwooo" },
             { sender: "awie", time: "15:39", text: "omagaa" },
             { sender: "awie", time: "15:39", text: "dalem tuh maknanya, thankss feyy" },
@@ -2189,7 +2199,7 @@
 
         // Playlist
         const playlist = [
-            { title: "Valentine's Day", artist: "LANY", src: "../assets/LANY - Valentine's Day.m4a", img: "../assets/ayang1.jpeg" }
+            { title: "Valentine's Day", artist: "LANY", src: "assets/LANY - Valentine's Day.m4a", img: "assets/ayang1.jpeg" }
         ];
         let currentTrackIndex = 0;
         let isPlaying = false;
@@ -2320,6 +2330,24 @@
                 closeTutorial();
             }
         });
+
+        // ===== PLAY MUSIC ON ANY INTERACTION =====
+        function tryPlayMusic() {
+            if (!isPlaying) {
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isPlaying = true;
+                        updatePlayIcon();
+                        // Remove listeners after successful play
+                        document.removeEventListener('click', tryPlayMusic);
+                        document.removeEventListener('touchstart', tryPlayMusic);
+                    }).catch(() => { });
+                }
+            }
+        }
+        document.addEventListener('click', tryPlayMusic);
+        document.addEventListener('touchstart', tryPlayMusic);
     </script>
 </body>
 
