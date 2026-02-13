@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Untuk Kamu 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.5s;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background: url('background.jpg') no-repeat center bottom fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        @media (max-width: 800px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .code-editor {
+            width: 48vw;
+            height: 90vh;
+            background: rgba(30, 60, 90, 0.85);
+            border: 3px solid #7ec8e3;
+            border-radius: 10px;
+            padding: 15px;
+            overflow: auto;
+            font-size: 13px;
+            line-height: 1.6;
+            box-shadow: 0 0 30px rgba(126, 200, 227, 0.4);
+            transform: rotateY(8deg) translateZ(-50px);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 800px) {
+            .code-editor {
+                width: 95vw;
+                height: 45vh;
+                transform: rotateX(-5deg) translateZ(-30px);
+            }
+        }
+
+        .pixel-container {
+            width: 320px;
+            height: 320px;
+            background: rgba(30, 60, 90, 0.9);
+            border: 3px solid #7ec8e3;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(126, 200, 227, 0.5);
+            position: relative;
+            transform: rotateY(-8deg) translateZ(-50px);
+            display: grid;
+            grid-template-columns: repeat(64, 5px);
+            grid-template-rows: repeat(64, 5px);
+            overflow: hidden;
+        }
+
+        @media (max-width: 800px) {
+            .pixel-container {
+                width: 280px;
+                height: 280px;
+                transform: rotateX(5deg) translateZ(-30px);
+                grid-template-columns: repeat(64, 4.375px);
+                grid-template-rows: repeat(64, 4.375px);
+            }
+        }
+
+        .pixel {
+            animation: pixelFadeIn 0.2s ease-out forwards;
+        }
+
+        @keyframes pixelFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Syntax Highlighting - Sky/Nature palette */
+        .comment {
+            color: #98d8aa;
+        }
+
+        .property {
+            color: #7ec8e3;
+        }
+
+        .selector {
+            color: #ffe17b;
+        }
+
+        .value {
+            color: #a8e6cf;
+        }
+
+        .punctuation {
+            color: #ffffff;
+        }
+
+        /* Auto Scroll Mode Styles */
+        .pixel-container.auto-scroll-mode {
+            display: block !important;
+            overflow: hidden;
+        }
+
+        .slide-track {
+            display: flex;
+            width: max-content;
+            animation: scrollContent 20s linear infinite;
+        }
+
+        .slide-item {
+            width: 320px;
+            height: 320px;
+            display: grid;
+            grid-template-columns: repeat(64, 5px);
+            grid-template-rows: repeat(64, 5px);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 800px) {
+            .slide-item {
+                width: 280px;
+                height: 280px;
+                grid-template-columns: repeat(64, 4.375px);
+                grid-template-rows: repeat(64, 4.375px);
+            }
+        }
+
+        @keyframes scrollContent {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+
+            /* Scroll half (original set) to loop */
+        }
+
+        /* Big Letter Meteor - diagonal fall from LEFT to RIGHT with spinning */
+        .big-letter-meteor {
+            position: fixed;
+            left: -150px;
+            top: -150px;
+            z-index: 1000;
+            pointer-events: none;
+            animation: diagonalFall 3s cubic-bezier(0.4, 0, 0.6, 1) forwards, meteorSpin 3s linear forwards;
+        }
+
+        .big-letter-meteor.landed {
+            animation: none;
+            left: 80%;
+            bottom: 8vh;
+            top: auto;
+            transform: rotate(15deg);
+        }
+
+        .big-pixel-letter {
+            width: 100px;
+            height: 75px;
+            position: relative;
+            image-rendering: auto;
+            /* Smoother for PNG */
+            object-fit: contain;
+        }
+
+        /* Removed CSS drawing for letter and heart since we use image now */
+
+        /* Pixel Fire Trail - on LEFT side (trailing behind) */
+        .pixel-fire-trail {
+            position: absolute;
+            top: 10px;
+            left: -160px;
+            width: 200px;
+            height: 120px;
+        }
+
+        .fire-particle {
+            position: absolute;
+            image-rendering: pixelated;
+            animation: flicker 0.15s ease-in-out infinite alternate;
+        }
+
+        .fire-particle.core {
+            background: #fff;
+            box-shadow: 0 0 6px #ffeb3b;
+        }
+
+        .fire-particle.inner {
+            background: #ffeb3b;
+        }
+
+        .fire-particle.mid {
+            background: #ff9800;
+        }
+
+        .fire-particle.outer {
+            background: #ff5722;
+        }
+
+        .fire-particle.tip {
+            background: #e64a19;
+        }
+
+        /* 25 fire particles - spread across trail */
+        .fire-particle:nth-child(1) {
+            width: 16px;
+            height: 16px;
+            top: 50px;
+            left: 5px;
+        }
+
+        .fire-particle:nth-child(2) {
+            width: 18px;
+            height: 16px;
+            top: 42px;
+            left: 15px;
+        }
+
+        .fire-particle:nth-child(3) {
+            width: 16px;
+            height: 14px;
+            top: 58px;
+            left: 20px;
+        }
+
+        .fire-particle:nth-child(4) {
+            width: 14px;
+            height: 12px;
+            top: 35px;
+            left: 30px;
+        }
+
+        .fire-particle:nth-child(5) {
+            width: 16px;
+            height: 14px;
+            top: 65px;
+            left: 35px;
+        }
+
+        .fire-particle:nth-child(6) {
+            width: 12px;
+            height: 12px;
+            top: 48px;
+            left: 45px;
+        }
+
+        .fire-particle:nth-child(7) {
+            width: 14px;
+            height: 12px;
+            top: 30px;
+            left: 50px;
+        }
+
+        .fire-particle:nth-child(8) {
+            width: 12px;
+            height: 10px;
+            top: 70px;
+            left: 55px;
+        }
+
+        .fire-particle:nth-child(9) {
+            width: 10px;
+            height: 10px;
+            top: 55px;
+            left: 65px;
+        }
+
+        .fire-particle:nth-child(10) {
+            width: 12px;
+            height: 10px;
+            top: 38px;
+            left: 72px;
+        }
+
+        .fire-particle:nth-child(11) {
+            width: 10px;
+            height: 8px;
+            top: 25px;
+            left: 80px;
+        }
+
+        .fire-particle:nth-child(12) {
+            width: 10px;
+            height: 8px;
+            top: 75px;
+            left: 85px;
+        }
+
+        .fire-particle:nth-child(13) {
+            width: 8px;
+            height: 8px;
+            top: 60px;
+            left: 95px;
+        }
+
+        .fire-particle:nth-child(14) {
+            width: 10px;
+            height: 8px;
+            top: 42px;
+            left: 100px;
+        }
+
+        .fire-particle:nth-child(15) {
+            width: 8px;
+            height: 6px;
+            top: 28px;
+            left: 110px;
+        }
+
+        .fire-particle:nth-child(16) {
+            width: 8px;
+            height: 6px;
+            top: 68px;
+            left: 115px;
+        }
+
+        .fire-particle:nth-child(17) {
+            width: 6px;
+            height: 6px;
+            top: 52px;
+            left: 125px;
+        }
+
+        .fire-particle:nth-child(18) {
+            width: 8px;
+            height: 6px;
+            top: 35px;
+            left: 130px;
+        }
+
+        .fire-particle:nth-child(19) {
+            width: 6px;
+            height: 5px;
+            top: 22px;
+            left: 140px;
+        }
+
+        .fire-particle:nth-child(20) {
+            width: 6px;
+            height: 5px;
+            top: 62px;
+            left: 145px;
+        }
+
+        .fire-particle:nth-child(21) {
+            width: 5px;
+            height: 4px;
+            top: 45px;
+            left: 155px;
+        }
+
+        .fire-particle:nth-child(22) {
+            width: 5px;
+            height: 4px;
+            top: 30px;
+            left: 162px;
+        }
+
+        .fire-particle:nth-child(23) {
+            width: 4px;
+            height: 3px;
+            top: 55px;
+            left: 170px;
+        }
+
+        .fire-particle:nth-child(24) {
+            width: 4px;
+            height: 3px;
+            top: 38px;
+            left: 180px;
+        }
+
+        .fire-particle:nth-child(25) {
+            width: 3px;
+            height: 2px;
+            top: 48px;
+            left: 190px;
+        }
+
+        .pixel-fire-trail.hidden {
+            display: none;
+        }
+
+        /* Impact dust - now on right side */
+        .impact-dust {
+            position: fixed;
+            bottom: 6vh;
+            left: 80%;
+            width: 100px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .dust-particle {
+            position: absolute;
+            bottom: 0;
+            width: 8px;
+            height: 8px;
+            background: #7a9f7a;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .dust-particle.animate {
+            animation: dustBurst 0.6s ease-out forwards;
+        }
+
+        @keyframes diagonalFall {
+            0% {
+                left: -150px;
+                top: -150px;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 80%;
+                top: calc(100vh - 8vh - 75px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes meteorSpin {
+            0% {
+                transform: rotate(-45deg);
+            }
+
+            100% {
+                transform: rotate(15deg);
+            }
+        }
+
+        @keyframes flicker {
+            from {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes dustBurst {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-25px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Touch Me Overlay */
+        .touch-me {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #6abf69, #98d8aa);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(106, 191, 105, 0.5);
+            animation: fadeInPulse 0.5s ease-out;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInPulse {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        .touch-me:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 8px 30px rgba(255, 107, 157, 0.7);
+        }
+
+        .touch-me.pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+
+        /* Decorations */
+        .decoration {
+            position: fixed;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.9;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .deco-heart {
+            top: 20px;
+            right: 40px;
+            width: 80px;
+            animation-delay: 0s;
+        }
+
+        .deco-kiss {
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            animation-delay: 2s;
+        }
+
+        .deco-iloveyou {
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            animation-delay: 4s;
+        }
+
+        .deco-video {
+            top: 50%;
+            left: 10px;
+            width: 80px;
+            transform: translateY(-50%);
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+        }
+
+        /* Love Letter Popup */
+        .letter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .letter-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .letter-popup {
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            /* Parchment gradient with blue/sky tint */
+            background:
+                linear-gradient(135deg, rgba(126, 200, 227, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #e8f4f8 0%, #d4e8ed 30%, #c5dce3 70%, #b8d4dc 100%);
+            border: none;
+            border-radius: 5px;
+            padding: 35px 40px;
+            position: relative;
+            box-shadow:
+                0 0 0 3px #7ec8e3,
+                0 0 0 6px rgba(126, 200, 227, 0.3),
+                0 15px 60px rgba(0, 0, 0, 0.4),
+                inset 0 0 80px rgba(126, 200, 227, 0.1);
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            /* Torn edges effect */
+            clip-path: polygon(0% 2%, 3% 0%, 8% 1%, 15% 0%, 22% 2%, 30% 0%, 38% 1%, 45% 0%, 52% 2%, 60% 0%, 68% 1%, 75% 0%, 82% 2%, 90% 0%, 95% 1%, 100% 0%,
+                    100% 98%, 97% 100%, 92% 99%, 85% 100%, 78% 98%, 70% 100%, 62% 99%, 55% 100%, 48% 98%, 40% 100%, 32% 99%, 25% 100%, 18% 98%, 10% 100%, 5% 99%, 0% 100%);
+        }
+
+        /* Hide scrollbar */
+        .letter-popup::-webkit-scrollbar {
+            display: none;
+        }
+
+        .letter-popup {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .letter-popup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .letter-overlay.show .letter-popup {
+            transform: scale(1);
+        }
+
+        .letter-header {
+            font-size: 26px;
+            color: #2a6a7c;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-content {
+            font-size: 16px;
+            color: #1e5a6b;
+            line-height: 2;
+            min-height: 150px;
+            font-family: 'Fira Code', monospace;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-content .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #7ec8e3;
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .letter-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: #7ec8e3;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            z-index: 2;
+        }
+
+        .letter-close:hover {
+            color: #2a6a7c;
+            transform: scale(1.2);
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 25px;
+            font-style: italic;
+            color: #2a6a7c;
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Make meteor clickable after landing */
+        .big-letter-meteor.landed {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .big-letter-meteor.landed:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Make kiss decoration clickable */
+        .deco-kiss {
+            pointer-events: auto !important;
+            cursor: pointer;
+        }
+
+        .deco-kiss:hover {
+            transform: translateY(-20px) rotate(5deg) scale(1.15) !important;
+        }
+
+        /* Retro Video Player Popup */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2500;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .video-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .retro-player {
+            width: 90%;
+            max-width: 600px;
+            max-height: 110vh;
+            background: linear-gradient(180deg, #1a3a4a 0%, #0d2530 100%);
+            border: 8px solid #2a5a6a;
+            border-radius: 20px;
+            padding: 15px;
+            position: relative;
+            box-shadow:
+                0 0 0 4px #7ec8e3,
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 -5px 20px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-overlay.show .retro-player {
+            transform: scale(1);
+        }
+
+        .retro-player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .retro-player-title {
+            font-size: 18px;
+            color: #7ec8e3;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(126, 200, 227, 0.5);
+        }
+
+        .video-close {
+            font-size: 30px;
+            color: #7ec8e3;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .video-close:hover {
+            color: #ff6b6b;
+            transform: scale(1.2);
+        }
+
+        .video-screen {
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 4px solid #3a6a7a;
+            flex: 1;
+            min-height: 0;
+            max-height: calc(90vh - 180px);
+        }
+
+        .video-screen video {
+            width: 100%;
+            max-height: calc(100% - 50px);
+            display: block;
+            border-radius: 6px;
+            object-fit: contain;
+            position: relative;
+            bottom: 20px;
+        }
+
+        /* CRT Scanlines Effect */
+        .video-screen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px);
+            pointer-events: none;
+        }
+
+        /* CRT Glow Effect */
+        .video-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .video-btn {
+            background: linear-gradient(180deg, #3a6a7a 0%, #2a5a6a 100%);
+            border: 3px solid #7ec8e3;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #7ec8e3;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .video-btn:hover {
+            background: linear-gradient(180deg, #4a7a8a 0%, #3a6a7a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(126, 200, 227, 0.3);
+        }
+
+        .video-btn.active {
+            background: #7ec8e3;
+            color: #1a3a4a;
+        }
+
+        .video-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #3a6a7a;
+            border: 2px solid #7ec8e3;
+            transition: all 0.3s;
+        }
+
+        .indicator-dot.active {
+            background: #7ec8e3;
+            box-shadow: 0 0 10px rgba(126, 200, 227, 0.7);
+        }
+
+        /* Chat Popup Styles */
+        .chat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .chat-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .chat-window {
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            background: linear-gradient(180deg, #1a3a4a 0%, #0d2530 100%);
+            border: 4px solid #7ec8e3;
+            border-radius: 20px;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 40px rgba(126, 200, 227, 0.3);
+        }
+
+        .chat-overlay.show .chat-window {
+            transform: scale(1);
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(126, 200, 227, 0.2);
+            border-bottom: 2px solid #7ec8e3;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            color: #7ec8e3;
+            font-weight: bold;
+        }
+
+        .chat-close {
+            font-size: 28px;
+            color: #7ec8e3;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .chat-close:hover {
+            color: #ff6b9d;
+            transform: scale(1.2);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(126, 200, 227, 0.1);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #7ec8e3;
+            border-radius: 3px;
+        }
+
+        .chat-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: chatFadeIn 0.4s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes chatFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-bubble.fey {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-bubble.awie {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #7ec8e3, #5bb5d4);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-sender {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            opacity: 0.9;
+        }
+
+        .chat-time {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .chat-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .chat-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Make heart decoration clickable */
+        .deco-heart {
+            pointer-events: auto !important;
+            cursor: pointer;
+        }
+
+        .deco-heart:hover {
+            transform: translateY(-20px) rotate(5deg) scale(1.15) !important;
+        }
+
+        /* ========== MUSIC PLAYER GLASS STYLES ========== */
+        :root {
+            --lg-bg-color: rgba(255, 255, 255, 0.15);
+            --lg-highlight: rgba(255, 255, 255, 0.5);
+            --lg-text: #ffffff;
+            --lg-hover-glow: rgba(126, 200, 227, 0.4);
+        }
+
+        .music-player-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1500;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.15;
+            transition: opacity 0.4s ease;
+        }
+
+        .music-player-container:hover {
+            opacity: 1;
+        }
+
+        .glass-container {
+            position: relative;
+            display: flex;
+            font-weight: 600;
+            color: var(--lg-text);
+            cursor: pointer;
+            background: transparent;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1),
+                0 0 30px rgba(126, 200, 227, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+            min-width: 380px;
+            max-width: 90vw;
+        }
+
+        @media (max-width: 500px) {
+            .glass-container {
+                min-width: unset;
+                width: 90vw;
+                border-radius: 1.5rem;
+            }
+        }
+
+        .glass-container:hover {
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3), 0 0 30px rgba(126, 200, 227, 0.5);
+        }
+
+        /* Glass Layers */
+        .glass-filter {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .glass-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: var(--lg-bg-color);
+        }
+
+        .glass-specular {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            border-radius: inherit;
+            overflow: hidden;
+            box-shadow: inset 1px 1px 0 var(--lg-highlight),
+                inset 0 0 5px var(--lg-highlight);
+        }
+
+        .glass-content {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.5rem 1.5rem 0.5rem 0.75rem;
+            flex: 1 1 auto;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        /* Player Layout */
+        .player {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            flex: 1 1 auto;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .player {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .player__thumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player__img {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            margin: 0.25rem 0;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .player__legend {
+            display: flex;
+            flex-direction: column;
+            margin: 0 0.75rem;
+            min-width: 100px;
+        }
+
+        .player__legend__title {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #fff;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        .player__legend__sub-title {
+            font-size: 0.75rem;
+            margin: 0;
+            opacity: 0.7;
+            color: #98d8aa;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Progress Section */
+        .player__progress {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 80px;
+        }
+
+        @media (max-width: 500px) {
+            .player__progress {
+                width: 100%;
+                order: 3;
+            }
+        }
+
+        .player__progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player__progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #7ec8e3, #98d8aa);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .player__time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Controls */
+        .player__controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .player__controls__btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .player__controls__btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.1);
+        }
+
+        .player__controls__btn svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        .player__controls__btn--play {
+            background: linear-gradient(135deg, #7ec8e3, #5bb5d4);
+            padding: 12px;
+            box-shadow: 0 4px 15px rgba(126, 200, 227, 0.4);
+        }
+
+        .player__controls__btn--play:hover {
+            background: linear-gradient(135deg, #98d8aa, #7ec8e3);
+            box-shadow: 0 6px 20px rgba(126, 200, 227, 0.6);
+        }
+
+        .player__controls__btn--play svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .player__controls__btn--prev svg {
+            transform: rotate(180deg);
+        }
+
+        /* Info Button */
+        .info-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 1500;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            filter: invert(1) drop-shadow(0 0 5px rgba(126, 200, 227, 0.5));
+        }
+
+        .info-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Tutorial Popup */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .tutorial-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .tutorial-popup {
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            background: linear-gradient(180deg, rgba(26, 58, 74, 0.98) 0%, rgba(13, 37, 48, 0.98) 100%);
+            border: 3px solid #7ec8e3;
+            border-radius: 20px;
+            padding: 25px 30px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(126, 200, 227, 0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .tutorial-overlay.show .tutorial-popup {
+            transform: scale(1);
+        }
+
+        .tutorial-header {
+            font-size: 22px;
+            color: #7ec8e3;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .tutorial-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #7ec8e3;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tutorial-close:hover {
+            color: #ff6b9d;
+            transform: scale(1.2);
+        }
+
+        .tutorial-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+            padding: 12px;
+            background: rgba(126, 200, 227, 0.1);
+            border-radius: 12px;
+            border-left: 3px solid #7ec8e3;
+        }
+
+        .tutorial-icon {
+            font-size: 28px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .tutorial-icon img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .tutorial-text {
+            flex: 1;
+        }
+
+        .tutorial-text h4 {
+            margin: 0 0 5px 0;
+            color: #98d8aa;
+            font-size: 14px;
+        }
+
+        .tutorial-text p {
+            margin: 0;
+            color: #ccc;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="code-editor" id="codeEditor"></div>
+        <div class="pixel-wrapper" style="position: relative;">
+            <div class="pixel-container" id="pixelContainer"></div>
+            <div class="touch-me" id="touchMe" style="display: none;">Touch Me</div>
+        </div>
+    </div>
+
+    <!-- Info Button -->
+    <img src="../assets/information.png" class="info-btn" id="infoBtn" alt="Info" title="Tutorial">
+
+    <!-- Tutorial Popup -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-popup">
+            <span class="tutorial-close" id="tutorialClose">&times;</span>
+            <div class="tutorial-header">Panduan Website</div>
+
+            <div class="tutorial-item">
+                <div class="tutorial-icon"><img src="../assets/love_letter-removebg-preview.png" alt="Letter"></div>
+                <div class="tutorial-text">
+                    <h4>Love Letter</h4>
+                    <p>Kalo ada <strong>surat jatuh</strong> di klik ya sayang :3</p>
+                </div>
+            </div>
+
+            <div class="tutorial-item">
+                <div class="tutorial-icon"><img src="../assets/kiss-removebg-preview.png" alt="Kiss"></div>
+                <div class="tutorial-text">
+                    <h4>Video Player</h4>
+                    <p>Kenangan dari <strong>kamu</strong> bakal selalu aku inget.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-item">
+                <div class="tutorial-icon"><img src="../assets/heart-removebg-preview.png" alt="Heart"></div>
+                <div class="tutorial-text">
+                    <h4>Chat History</h4>
+                    <p>Wah <strong>setahun lalu</strong> udahan ya sayang, ga kerasa kalo bareng kamu :3.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-item">
+                <div class="tutorial-icon"><img src="../assets/iloveyou-removebg-preview.png" alt="Music"></div>
+                <div class="tutorial-text">
+                    <h4>Music Player</h4>
+                    <p>Fitur aja sih hehe.</p>
+                </div>
+            </div>
+
+            <div class="tutorial-item">
+                <div class="tutorial-icon"><span
+                        style="font-size: 9px; background: linear-gradient(135deg, #6abf69, #98d8aa); color: white; padding: 4px 5px; border-radius: 8px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; box-sizing: border-box;">Touch
+                        Me</span></div>
+                <div class="tutorial-text">
+                    <h4>Photo Carousel</h4>
+                    <p>Harus banget <strong>dipencet</strong> sampai ngulang biar aesthetic!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decorations -->
+    <img src="../assets/heart-removebg-preview.png" class="decoration deco-heart" alt="Heart">
+    <img src="../assets/kiss-removebg-preview.png" class="decoration deco-kiss" alt="Kiss">
+    <img src="../assets/iloveyou-removebg-preview.png" class="decoration deco-iloveyou" alt="I Love You">
+    <img src="../assets/video-removebg-preview.png" class="decoration deco-video" alt="Video">
+
+    <!-- Music Player -->
+    <div class="music-player-container">
+        <div class="glass-container">
+            <div class="glass-filter"></div>
+            <div class="glass-overlay"></div>
+            <div class="glass-specular"></div>
+            <div class="glass-content">
+                <div class="player">
+                    <div class="player__thumb">
+                        <div class="player__legend">
+                            <h3 class="player__legend__title" id="musicTitle">Valentine's Day</h3>
+                            <span class="player__legend__sub-title" id="musicArtist">LANY</span>
+                        </div>
+                    </div>
+
+                    <div class="player__progress">
+                        <div class="player__progress-bar-container" id="progressContainer">
+                            <div class="player__progress-bar" id="progressBar"></div>
+                        </div>
+                        <div class="player__time">
+                            <span id="currentTime">0:00</span>
+                            <span id="durationTime">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="player__controls">
+                        <button class="player__controls__btn player__controls__btn--prev" id="prevBtn" title="Previous">
+                            <svg viewBox="0 0 448 512">
+                                <path
+                                    d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" />
+                            </svg>
+                        </button>
+                        <button class="player__controls__btn player__controls__btn--play" id="playBtn"
+                            title="Play/Pause">
+                            <svg viewBox="0 0 448 512" id="playIcon">
+                                <path
+                                    d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" />
+                            </svg>
+                        </button>
+                        <button class="player__controls__btn player__controls__btn--next" id="nextBtn" title="Next">
+                            <svg viewBox="0 0 448 512">
+                                <path
+                                    d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" preload="auto">
+        <source src="../assets/LANY - Valentine's Day.m4a" type="audio/mp4">
+    </audio>
+
+    <!-- Love Letter Popup -->
+    <div class="letter-overlay" id="letterOverlay">
+        <div class="letter-popup">
+            <span class="letter-close" id="letterClose">&times;</span>
+            <div class="letter-header">Surat Cinta</div>
+            <div class="letter-content" id="letterContent"></div>
+            <div class="letter-signature" id="letterSignature"></div>
+        </div>
+    </div>
+
+    <!-- Retro Video Player Popup -->
+    <div class="video-overlay" id="videoOverlay">
+        <div class="retro-player">
+            <div class="retro-player-header">
+                <span class="retro-player-title">Video Player</span>
+                <span class="video-close" id="videoClose">&times;</span>
+            </div>
+            <div class="video-screen">
+                <video id="retroVideo" controls>
+                    <source src="../assets/Animasi 1.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-controls">
+                <button class="video-btn" id="videoPrev">◀ Prev</button>
+                <button class="video-btn" id="videoNext">Next ▶</button>
+            </div>
+            <div class="video-indicator">
+                <span class="indicator-dot active" data-index="0"></span>
+                <span class="indicator-dot" data-index="1"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Popup -->
+    <div class="chat-overlay" id="chatOverlay">
+        <div class="chat-window">
+            <div class="chat-header">
+                <span class="chat-title">Our Chat One Year Ago</span>
+                <span class="chat-close" id="chatClose">&times;</span>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+        </div>
+    </div>
+
+    <script src="pixel_carousel.js"></script>
+    <script>
+        // Elements
+        const codeEditor = document.getElementById('codeEditor');
+        const pixelContainer = document.getElementById('pixelContainer');
+
+        // Configuration
+        const TYPING_SPEED = 15; // ms per character
+        const LINE_DELAY = 100; // ms between lines
+        const PIXELS_PER_BATCH = 8;
+        const PIXEL_BATCH_DELAY = 5; // ms per batch
+
+        // Code lines with type for syntax highlighting
+        const introLines = [
+            { type: 'comment', text: '/*' },
+            { type: 'comment', text: ' * Hai Mbeb!' },
+            { type: 'comment', text: ' * Kamu tau kan aku tuh jago ngoding... (Amin)' },
+            { type: 'comment', text: ' * Nah, aku bisa buat gini loh.' },
+            { type: 'comment', text: ' * TUngguin coba...' },
+            { type: 'comment', text: ' */' },
+            { type: 'blank', text: '' },
+            { type: 'comment', text: '/* Styling untuk halaman ini */' },
+            { type: 'selector', text: 'body {' },
+            { type: 'property', text: '    background: linear-gradient(135deg, #1a1a2e, #16213e);' },
+            { type: 'property', text: '    color: #fff;' },
+            { type: 'selector', text: '}' },
+            { type: 'blank', text: '' },
+            { type: 'comment', text: '/*' },
+            { type: 'comment', text: ' * Sekarang...' },
+            { type: 'comment', text: ' * Liat ada siapa disamping?' },
+            { type: 'comment', text: ' * Sabar ya sayangku :3' },
+            { type: 'comment', text: ' */' },
+            { type: 'blank', text: '' },
+        ];
+
+        const outroLines = [
+            { type: 'blank', text: '' },
+            { type: 'comment', text: '/*' },
+            { type: 'comment', text: ' * Oh no! Itu kamu sayang!' },
+            { type: 'comment', text: ' * Cantik kan? Cantik lah orang punya aku :3' },
+            { type: 'comment', text: ' * Happy Valentine\'s Day, Baby!' },
+            { type: 'comment', text: ' */' },
+        ];
+
+        // Type a single line with syntax highlighting
+        async function typeLine(lineObj) {
+            const lineDiv = document.createElement('div');
+            lineDiv.className = lineObj.type;
+            codeEditor.appendChild(lineDiv);
+
+            for (let char of lineObj.text) {
+                lineDiv.textContent += char;
+                codeEditor.scrollTop = codeEditor.scrollHeight;
+                await sleep(TYPING_SPEED);
+            }
+
+            // Add line break effect
+            if (lineObj.text === '') {
+                lineDiv.innerHTML = '&nbsp;';
+            }
+
+            await sleep(LINE_DELAY);
+        }
+
+        // Type multiple lines
+        async function typeLines(lines) {
+            for (let line of lines) {
+                await typeLine(line);
+            }
+        }
+
+        // Show pixels in batches
+        async function showPixels() {
+            const totalPixels = pixelData.length;
+            let currentPixel = 0;
+
+            while (currentPixel < totalPixels) {
+                // Add batch of pixels
+                for (let i = 0; i < PIXELS_PER_BATCH && currentPixel < totalPixels; i++, currentPixel++) {
+                    const pixel = document.createElement('div');
+                    pixel.className = 'pixel';
+                    pixel.style.backgroundColor = pixelData[currentPixel];
+                    pixelContainer.appendChild(pixel);
+                }
+
+                await sleep(PIXEL_BATCH_DELAY);
+            }
+        }
+
+        // Auto Scroll Logic
+        let viewedPhotos = new Set();
+        let autoScrollTimer = null;
+        let isAutoScrolling = false;
+
+        function startAutoScroll() {
+            if (isAutoScrolling) return;
+            isAutoScrolling = true;
+
+            // Hide Touch Me
+            document.getElementById('touchMe').style.display = 'none';
+
+            // Switch to auto scroll mode
+            pixelContainer.innerHTML = '';
+            pixelContainer.classList.add('auto-scroll-mode');
+
+            const track = document.createElement('div');
+            track.className = 'slide-track';
+
+            // Duplicate photos for scrolling (Original + Clone)
+            const allPhotos = [...pixelDataAll, ...pixelDataAll]; // 4 + 4 = 8 items
+
+            allPhotos.forEach(pixels => {
+                const item = document.createElement('div');
+                item.className = 'slide-item';
+
+                // Render pixels for this item (using pixel class for fade in? No need for fade in here, just bg)
+                pixels.forEach(color => {
+                    const p = document.createElement('div');
+                    // p.className = 'pixel'; // Avoid fade-in animation for marquee
+                    p.style.backgroundColor = color;
+                    item.appendChild(p);
+                });
+
+                track.appendChild(item);
+            });
+
+            pixelContainer.appendChild(track);
+        }
+
+        // Create BIG letter meteor that lands on ground
+        function createBigLetterMeteor() {
+            const meteor = document.createElement('div');
+            meteor.className = 'big-letter-meteor';
+
+            // Pixel fire trail
+            const fireTrail = document.createElement('div');
+            fireTrail.className = 'pixel-fire-trail';
+
+            // Create 25 fire particles with different colors (core to tip)
+            const colors = [
+                'core', 'core', 'inner', 'inner', 'inner',
+                'mid', 'mid', 'mid', 'mid', 'mid',
+                'outer', 'outer', 'outer', 'outer', 'outer',
+                'outer', 'outer', 'tip', 'tip', 'tip',
+                'tip', 'tip', 'tip', 'tip', 'tip'
+            ];
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'fire-particle ' + colors[i];
+                fireTrail.appendChild(particle);
+            }
+
+            // The letter itself - using image
+            const letter = document.createElement('img');
+            letter.src = '../assets/love_letter-removebg-preview.png';
+            letter.className = 'big-pixel-letter';
+
+            // No heart seal needed for image, it's part of the image
+            // const heart = document.createElement('div');
+            // heart.className = 'big-letter-heart';
+            // letter.appendChild(heart);
+
+            meteor.appendChild(fireTrail);
+            meteor.appendChild(letter);
+            document.body.appendChild(meteor);
+
+            // After landing - hide fire and show dust (matches 3s animation)
+            setTimeout(() => {
+                fireTrail.classList.add('hidden');
+                meteor.classList.add('landed');
+                createDustEffect();
+            }, 3000);
+        }
+
+        // Dust impact effect when letter lands
+        function createDustEffect() {
+            const dust = document.createElement('div');
+            dust.className = 'impact-dust';
+
+            // Create dust particles spreading out
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'dust-particle';
+                particle.style.left = (50 + (i - 4) * 15) + 'px';
+                particle.style.animationDelay = (i * 0.05) + 's';
+                dust.appendChild(particle);
+
+                // Trigger animation
+                setTimeout(() => particle.classList.add('animate'), 10);
+            }
+
+            document.body.appendChild(dust);
+
+            // Remove dust after animation
+            setTimeout(() => dust.remove(), 1500);
+        }
+
+        // Utility function
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Start animation
+        async function init() {
+            const touchMe = document.getElementById('touchMe');
+
+            // Phase 1: Type intro
+            await typeLines(introLines);
+            await sleep(300);
+
+            // Phase 2: Show pixels
+            await showPixels();
+
+            // Phase 3: Show Touch Me button
+            touchMe.style.display = 'block';
+
+            // Add click handler for photo carousel
+            touchMe.addEventListener('click', switchToNextPhoto);
+
+            await sleep(1000);
+
+            // Phase 4: Type outro
+            await typeLines(outroLines);
+
+            // Phase 5: Big letter meteor lands!
+            await sleep(500);
+            createBigLetterMeteor();
+        }
+
+        // Switch to next photo in carousel
+        function switchToNextPhoto() {
+            // Track viewed photo - current one before switching? 
+            // Better to track the one we JUST viewed.
+            // But if we start with 0, and click, we are "done" viewing 0.
+            // So track `currentImageIndex` BEFORE incrementing.
+            viewedPhotos.add(currentImageIndex);
+
+            currentImageIndex = (currentImageIndex + 1) % pixelDataAll.length;
+
+            // Clear current pixels
+            pixelContainer.innerHTML = '';
+
+            // Show new pixels instantly
+            const newPixels = pixelDataAll[currentImageIndex];
+            for (let i = 0; i < newPixels.length; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.style.backgroundColor = newPixels[i];
+                pixelContainer.appendChild(pixel);
+            }
+
+            // Check if all photos have been viewed
+            if (viewedPhotos.size >= pixelDataAll.length && !isAutoScrolling) {
+                // User has seen all photos, trigger auto scroll after a short delay
+                if (!autoScrollTimer) {
+                    console.log("All photos viewed! Starting auto-scroll in 2s...");
+                    autoScrollTimer = setTimeout(startAutoScroll, 2000);
+                }
+            }
+        }
+
+        // Start when page loads
+        window.addEventListener('load', init);
+
+        // ===== LOVE LETTER POPUP =====
+        const letterOverlay = document.getElementById('letterOverlay');
+        const letterContent = document.getElementById('letterContent');
+        const letterSignature = document.getElementById('letterSignature');
+        const letterClose = document.getElementById('letterClose');
+
+        // Letter text lines
+        const letterLines = [
+            "Allow Sayangkuh!",
+            "",
+            "Makasih ya udah jadi bagian dari hidupku selama setahun ini.",
+            "Hari-hariku jadi lebih berwarna dan seru rasanya kalo sama kamu.",
+            "",
+            "Mulai dari Ohayou kamu yang aku nantiin tiap pagi,",
+            "sampe kita mau tidur lagi aku pingin spend waktu sama kamu terus.",
+            "",
+            "I Love You more than any words in this world, i wish we can be together forever.",
+            "Happy Valentine's Day, Baby!",
+            ""
+        ];
+
+        const signatureText = "Love, Awie";
+
+        let isTypingLetter = false;
+
+        // Type letter content with animation
+        async function typeLetterContent() {
+            if (isTypingLetter) return;
+            isTypingLetter = true;
+
+            letterContent.innerHTML = '';
+            letterSignature.innerHTML = '';
+
+            // Add cursor
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            letterContent.appendChild(cursor);
+
+            for (const line of letterLines) {
+                if (line === '') {
+                    letterContent.insertBefore(document.createElement('br'), cursor);
+                    await sleep(200);
+                } else {
+                    for (const char of line) {
+                        const textNode = document.createTextNode(char);
+                        letterContent.insertBefore(textNode, cursor);
+                        await sleep(30);
+                    }
+                    letterContent.insertBefore(document.createElement('br'), cursor);
+                    await sleep(100);
+                }
+            }
+
+            // Remove cursor and add signature
+            cursor.remove();
+            await sleep(500);
+            letterSignature.textContent = signatureText;
+            isTypingLetter = false;
+        }
+
+        // Open letter popup
+        function openLetterPopup() {
+            letterOverlay.classList.add('show');
+            setTimeout(() => {
+                typeLetterContent();
+            }, 300);
+        }
+
+        // Close letter popup
+        function closeLetterPopup() {
+            letterOverlay.classList.remove('show');
+            letterContent.innerHTML = '';
+            letterSignature.innerHTML = '';
+            isTypingLetter = false;
+        }
+
+        // Close button handler
+        letterClose.addEventListener('click', closeLetterPopup);
+
+        // Click outside to close
+        letterOverlay.addEventListener('click', (e) => {
+            if (e.target === letterOverlay) {
+                closeLetterPopup();
+            }
+        });
+
+        // Make meteor clickable - add event listener after it lands
+        function attachMeteorClickHandler() {
+            const meteor = document.querySelector('.big-letter-meteor.landed');
+            if (meteor) {
+                meteor.addEventListener('click', openLetterPopup);
+            }
+        }
+
+        // Override createDustEffect to attach click handler after dust settles
+        const originalCreateDustEffect = createDustEffect;
+        createDustEffect = function () {
+            originalCreateDustEffect();
+            // Attach click handler after meteor lands
+            setTimeout(attachMeteorClickHandler, 100);
+        };
+
+        // ===== RETRO VIDEO PLAYER =====
+        const videoOverlay = document.getElementById('videoOverlay');
+        const videoClose = document.getElementById('videoClose');
+        const retroVideo = document.getElementById('retroVideo');
+        const videoPrev = document.getElementById('videoPrev');
+        const videoNext = document.getElementById('videoNext');
+        const indicatorDots = document.querySelectorAll('.indicator-dot');
+        const kissDecoration = document.querySelector('.deco-kiss');
+
+        const videoPlaylist = [
+            '../assets/Animasi 1.mp4',
+            '../assets/Animasi 2.mp4'
+        ];
+        let currentVideoIndex = 0;
+
+        function updateVideoIndicator() {
+            indicatorDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentVideoIndex);
+            });
+        }
+
+        function loadVideo(index) {
+            currentVideoIndex = index;
+            retroVideo.src = videoPlaylist[index];
+            retroVideo.load();
+            retroVideo.play();
+            updateVideoIndicator();
+        }
+
+        function openVideoPlayer() {
+            videoOverlay.classList.add('show');
+            currentVideoIndex = 0;
+            loadVideo(0);
+        }
+
+        function closeVideoPlayer() {
+            videoOverlay.classList.remove('show');
+            retroVideo.pause();
+            retroVideo.currentTime = 0;
+        }
+
+        // Event Listeners
+        kissDecoration.addEventListener('click', openVideoPlayer);
+        videoClose.addEventListener('click', closeVideoPlayer);
+
+        videoOverlay.addEventListener('click', (e) => {
+            if (e.target === videoOverlay) {
+                closeVideoPlayer();
+            }
+        });
+
+        videoPrev.addEventListener('click', () => {
+            const newIndex = currentVideoIndex === 0 ? videoPlaylist.length - 1 : currentVideoIndex - 1;
+            loadVideo(newIndex);
+        });
+
+        videoNext.addEventListener('click', () => {
+            const newIndex = (currentVideoIndex + 1) % videoPlaylist.length;
+            loadVideo(newIndex);
+        });
+
+        // Auto-play next video when current ends
+        retroVideo.addEventListener('ended', () => {
+            const newIndex = (currentVideoIndex + 1) % videoPlaylist.length;
+            loadVideo(newIndex);
+        });
+
+        // Indicator dot clicks
+        indicatorDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => loadVideo(index));
+        });
+
+        // ===== CHAT POPUP =====
+        const chatOverlay = document.getElementById('chatOverlay');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatClose = document.getElementById('chatClose');
+        const heartDecoration = document.querySelector('.deco-heart');
+
+        // Chat data (converted from chat.md)
+        const chatData = [
+            { sender: "fey", time: "14:10", text: "Heyyo heyyoo, lagi apaa" },
+            { sender: "fey", time: "14:11", text: "Renungan hari iniehhh", image: "../assets/photo_2025-02-14_14-11-52.jpg" },
+            { sender: "awie", time: "15:39", text: "hawlwooo" },
+            { sender: "awie", time: "15:39", text: "omagaa" },
+            { sender: "awie", time: "15:39", text: "dalem tuh maknanya, thankss feyy" },
+            { sender: "awie", time: "15:39", text: "anyway Happy Valentine yaa" },
+            { sender: "fey", time: "15:56", text: "Iyaaappp" },
+            { sender: "fey", time: "15:56", text: "Iyaaa happy valentineeee~~" },
+            { sender: "fey", time: "15:57", text: "Lagi apaa ta" },
+            { sender: "awie", time: "15:59", text: "lagii apaa ya" },
+            { sender: "awie", time: "15:59", text: "gatauu mau ngapain sekarang" },
+            { sender: "fey", time: "16:00", text: "WKWKWK" },
+            { sender: "awie", time: "16:00", text: "btw akhir2 ini aku di fase \"gatau mau ngapain\" ya" },
+            { sender: "fey", time: "16:00", text: "Kenapa tuh" },
+            { sender: "awie", time: "16:00", text: "kek kehilangan semangat hidup" },
+            { sender: "fey", time: "16:00", text: "Lagi gak ada interest satu hal ya" },
+            { sender: "fey", time: "16:00", text: "Atau karna laagi capekk" },
+            { sender: "fey", time: "16:00", text: "Anw masih pilek ta" },
+            { sender: "awie", time: "16:01", text: "masihhh" },
+            { sender: "awie", time: "16:01", text: "yapo semacam ituu" },
+            { sender: "awie", time: "16:01", text: "tpi ngelakuin apa apa masih perform kok" },
+            { sender: "fey", time: "16:01", text: "Waww uda minum obatt? Emg hrs nunggu sih kan gk langsung sembuh jg" },
+            { sender: "awie", time: "16:02", text: "udaaa feeyy" },
+            { sender: "fey", time: "16:02", text: "Kamu lagi burnout kali, aku biasa kalo biaasanya sibuk trs tb2 begitu jugaa" },
+            { sender: "awie", time: "16:02", text: "emang musim nya ga sihh" },
+            { sender: "fey", time: "16:02", text: "Iyah pls" },
+            { sender: "awie", time: "16:02", text: "damnn, penyakit apa lagi ini" },
+            { sender: "fey", time: "16:03", text: "WKWK burnoutt biaasa karna otak kamu di push terus tiap hari untuk menerima suatu hall, otak kamu jd capek dan yaaaa... Butuh istirahat, jd gk tau mau ngapain, maunya kalem2 dulu" },
+            { sender: "fey", time: "16:03", text: "Aku pernah gitu soalnya" },
+            { sender: "fey", time: "16:03", text: "Mendadak 1 bulan yg biasanya ini itu jd gk tau mau ngapain" },
+            { sender: "awie", time: "16:03", text: "wahhh" },
+            { sender: "awie", time: "16:03", text: "kebayang ga sihh" },
+            { sender: "awie", time: "16:03", text: "feyfey yang tiap hari hectic" },
+            { sender: "awie", time: "16:03", text: "dah kayak tiap hari dikejar deadline" },
+            { sender: "awie", time: "16:04", text: "tiba tiba berhenti melakukannya" },
+            { sender: "fey", time: "16:04", text: "WKWK IYAAA kamu tampaknya lagi fase itu sih" },
+            { sender: "awie", time: "16:04", text: "dan berkata \"fak this shit, im tired\"" },
+            { sender: "fey", time: "16:04", text: "WKWKWK FOR REALL" },
+            { sender: "awie", time: "16:04", text: "tpi asli hari senin sama selasa ngabisin energi buanget" },
+            { sender: "fey", time: "16:04", text: "Kenapaa tuhh? Kuliahnya padet?" },
+            { sender: "awie", time: "16:04", text: "masa iya dari jam 7 - 5 loh sampe rumah" },
+            { sender: "awie", time: "16:04", text: "iyaa" },
+            { sender: "fey", time: "16:05", text: "Anjirrr" },
+            { sender: "awie", time: "16:05", text: "tpi gapapa" },
+            { sender: "awie", time: "16:05", text: "emang harus gini" },
+            { sender: "awie", time: "16:06", text: "biar hidup ga gitu gitu aja" },
+            { sender: "fey", time: "16:06", text: "Iyaaa ada waktunya kamu bener2 sibuk ada waktunya jg free, dan ada waktunya jg nanti kamu menerima hasil yg kamu udah cape2 lewatin" },
+            { sender: "fey", time: "16:06", text: "😌😌" },
+            { sender: "fey", time: "16:06", text: "Cemunguttt~" },
+            { sender: "awie", time: "16:29", text: "wahhh" },
+            { sender: "awie", time: "16:29", text: "gelokk" },
+            { sender: "awie", time: "16:29", text: "kata2 bijak dari kaylaa" },
+            { sender: "awie", time: "16:29", text: "arigatou" },
+            { sender: "awie", time: "16:29", text: "kamu jugaa yakk" },
+            { sender: "fey", time: "16:38", text: "WKWWK iya donggg" },
+            { sender: "fey", time: "16:38", text: "Tentuu sajahh~~~" },
+            { sender: "awie", time: "16:45", text: "aku mandii sama nugas duluu yaa feyy" },
+            { sender: "fey", time: "16:48", text: "Iyaaaauuu" }
+        ];
+
+        // Render chat messages
+        function renderChatMessages() {
+            chatMessages.innerHTML = '';
+            chatData.forEach((msg, index) => {
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${msg.sender}`;
+                bubble.style.animationDelay = `${index * 0.05}s`;
+
+                const senderName = msg.sender === 'fey' ? 'Fey' : 'Awie';
+                const imageHtml = msg.image ? `<img src="${msg.image}" class="chat-image" alt="Photo">` : '';
+                bubble.innerHTML = `
+                    <div class="chat-sender">${senderName}</div>
+                    <div class="chat-text">${msg.text}</div>
+                    ${imageHtml}
+                    <div class="chat-time">${msg.time}</div>
+                `;
+                chatMessages.appendChild(bubble);
+            });
+        }
+
+        // Open chat popup
+        function openChatPopup() {
+            renderChatMessages();
+            chatOverlay.classList.add('show');
+        }
+
+        // Close chat popup
+        function closeChatPopup() {
+            chatOverlay.classList.remove('show');
+        }
+
+        // Event listeners
+        heartDecoration.addEventListener('click', openChatPopup);
+        chatClose.addEventListener('click', closeChatPopup);
+        chatOverlay.addEventListener('click', (e) => {
+            if (e.target === chatOverlay) {
+                closeChatPopup();
+            }
+        });
+
+        // ===== MUSIC PLAYER =====
+        const bgMusic = document.getElementById('bgMusic');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const musicTitle = document.getElementById('musicTitle');
+        const musicArtist = document.getElementById('musicArtist');
+        const albumArt = document.getElementById('albumArt');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+
+        // Play and Pause SVG paths
+        const playSvgPath = 'M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z';
+        const pauseSvgPath = 'M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-448h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V79c0-26.5-21.5-48-48-48z';
+
+        // Playlist
+        const playlist = [
+            { title: "Valentine's Day", artist: "LANY", src: "../assets/LANY - Valentine's Day.m4a", img: "../assets/ayang1.jpeg" }
+        ];
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+
+        // Format time (seconds to mm:ss)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Update progress bar and time
+        function updateProgress() {
+            const { currentTime, duration } = bgMusic;
+            const percent = (currentTime / duration) * 100;
+            progressBar.style.width = `${percent}%`;
+            currentTimeEl.textContent = formatTime(currentTime);
+            if (!isNaN(duration)) {
+                durationTimeEl.textContent = formatTime(duration);
+            }
+        }
+
+        // Load track
+        function loadTrack(index) {
+            const track = playlist[index];
+            bgMusic.src = track.src;
+            musicTitle.textContent = track.title;
+            musicArtist.textContent = track.artist;
+            if (track.img) albumArt.src = track.img;
+            bgMusic.load();
+        }
+
+        // Update play/pause icon
+        function updatePlayIcon() {
+            const path = playIcon.querySelector('path');
+            if (isPlaying) {
+                path.setAttribute('d', pauseSvgPath);
+            } else {
+                path.setAttribute('d', playSvgPath);
+            }
+        }
+
+        // Play/Pause toggle
+        function togglePlay() {
+            if (isPlaying) {
+                bgMusic.pause();
+            } else {
+                bgMusic.play();
+            }
+            isPlaying = !isPlaying;
+            updatePlayIcon();
+        }
+
+        // Next track
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(currentTrackIndex);
+            if (isPlaying) {
+                bgMusic.play();
+            }
+        }
+
+        // Previous track
+        function prevTrack() {
+            currentTrackIndex = currentTrackIndex === 0 ? playlist.length - 1 : currentTrackIndex - 1;
+            loadTrack(currentTrackIndex);
+            if (isPlaying) {
+                bgMusic.play();
+            }
+        }
+
+        // Seek on progress bar click
+        function seekTo(e) {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const percent = clickX / width;
+            bgMusic.currentTime = percent * bgMusic.duration;
+        }
+
+        // Event listeners
+        playBtn.addEventListener('click', togglePlay);
+        nextBtn.addEventListener('click', nextTrack);
+        prevBtn.addEventListener('click', prevTrack);
+        bgMusic.addEventListener('timeupdate', updateProgress);
+        bgMusic.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(bgMusic.duration);
+        });
+        bgMusic.addEventListener('ended', nextTrack);
+        progressContainer.addEventListener('click', seekTo);
+
+        // Auto-play hint (browsers may block autoplay)
+        bgMusic.volume = 0.7;
+
+        // Auto-play on page load
+        window.addEventListener('load', () => {
+            // Try to auto-play (may be blocked by browser)
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isPlaying = true;
+                    updatePlayIcon();
+                }).catch(() => {
+                    // Auto-play was prevented, user needs to click play
+                    console.log('Auto-play blocked by browser. Click play to start.');
+                });
+            }
+        });
+
+        // ===== TUTORIAL POPUP =====
+        const infoBtn = document.getElementById('infoBtn');
+        const tutorialOverlay = document.getElementById('tutorialOverlay');
+        const tutorialClose = document.getElementById('tutorialClose');
+
+        function openTutorial() {
+            tutorialOverlay.classList.add('show');
+        }
+
+        function closeTutorial() {
+            tutorialOverlay.classList.remove('show');
+        }
+
+        infoBtn.addEventListener('click', openTutorial);
+        tutorialClose.addEventListener('click', closeTutorial);
+        tutorialOverlay.addEventListener('click', (e) => {
+            if (e.target === tutorialOverlay) {
+                closeTutorial();
+            }
+        });
+    </script>
+</body>
+
+</html>
